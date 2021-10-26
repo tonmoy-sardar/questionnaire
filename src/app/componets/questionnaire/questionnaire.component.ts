@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FieldModel } from 'src/app/models/field.model';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { FormGroup } from '@angular/forms';
-import { FormControlService } from 'src/app/services/form-control.service';
+import { FormGroup, FormControl } from '@angular/forms';
+import { QuestionnaireService } from 'src/app/services/questionnaire.service';
 
 @Component({
   selector: 'app-questionnaire',
@@ -12,32 +9,41 @@ import { FormControlService } from 'src/app/services/form-control.service';
 })
 export class QuestionnaireComponent implements OnInit {
 
-  form: FormGroup;
-  fields: FieldModel;
-  constructor(private httpClient: HttpClient,
-    private formControlService: FormControlService) { }
+  questionnaireForm: FormGroup;
+  questionnaireList: any = [];
+
+  constructor(
+    private questionnaireService: QuestionnaireService
+    ) { }
 
   ngOnInit() {
-    this.getFields();
+    this.getQuestionnaire();
   }
 
-  getFields(){
-    this.httpClient.get('/assets/questionnaire.json')
-    .pipe(map((fields: FieldModel[])=>{
-      return fields.map(field=>{
-        return new FieldModel(field)
-      })
-    }))
-    .subscribe((fields: any)=>{
-      this.fields = fields;
-      this.form = this.formControlService.getFormGroupObject(fields);
-
-      console.log(this.form)
-    });
+  getQuestionnaire()
+  {
+    this.questionnaireService.getQuestionnaire().subscribe(
+      res => {
+        console.log(res)
+        this.questionnaireForm = new FormGroup({});
+        this.questionnaireList = res['item'];
+        this.buildFinalForm()
+      },
+      error => {
+        console.log(error)
+      }
+    )
+  }
+  buildFinalForm(){
+    let group={}    
+    this.questionnaireList.forEach(x=>{
+      group[x.linkId]= new FormControl()    
+    })
+    this.questionnaireForm = new FormGroup(group);
   }
 
   onSubmit() {
-    console.log(this.form.value);
+    console.log(this.questionnaireForm.value);
   }
 
 
