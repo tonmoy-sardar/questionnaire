@@ -1,41 +1,57 @@
-<section>
+<div class="row">
+    <div class="col-lg-12">
     <form [formGroup]="questionnaireForm">
-        <div class="row">
+        <div class="row question-block" >
             <ng-container *ngFor="let field of questionnaireList">
                 <ng-container [ngSwitch]="field.type">
                     <ng-container *ngSwitchCase="'string'">
-                        <div>
-                            <label [attr.for]="field.linkId">{{field.text}}</label>
+                        <div class="col-lg-12">
+                            <label [attr.for]="field.linkId" class="right-padding">{{field.text}}</label>
                             <input [formControlName]="field.linkId" [id]="field.linkId" type="text">
+                            
                         </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'choice'">
-                        <div>
-                            <label [attr.for]="field.linkId">{{field.text}}</label>
+                        <div class="col-lg-12">
+                            <label [attr.for]="field.linkId" class="right-padding">{{field.text}}</label>
                             <select [id]="field.linkId" [formControlName]="field.linkId">
                                 <option *ngFor="let opt of field.option" [value]="opt.valueCoding.code">{{opt.valueCoding.display}}</option>
                             </select>
                         </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'date'">
-                        <div>
-                            <label [attr.for]="field.linkId">{{field.text}}</label>
+                        <div class="col-lg-12">
+                            <label [attr.for]="field.linkId" class="right-padding">{{field.text}}</label>
                             <input type="date" [formControlName]="field.linkId" [id]="field.linkId">
                         </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="'boolean'">
-                        <div>
-                            <label [attr.for]="field.linkId">{{field.text}}</label>
+                        <div class="col-lg-12">
+                            <label [attr.for]="field.linkId" class="right-padding">{{field.text}}</label>
                             <input  type="radio" value=true [formControlName]="field.linkId">Yes
                             <input  type="radio" value=false [formControlName]="field.linkId">No
                         </div>
                     </ng-container>
                 </ng-container>
             </ng-container>
-                
-        </div>
-        <div>
-            <button (click)="onSubmit()"> Submit</button>
+            <div class="col-lg-12" style="text-align: center;">
+                <button (click)="onSubmit()"> Submit</button>
+            </div>
         </div>
     </form>
-</section>
+</div>
+</div>
+<div class="row" *ngIf="is_submit">
+    <div class="col-lg-12">
+    <form [formGroup]="questionnaireForm">
+        <div class="row answer-block">
+            <ng-container *ngFor="let field of questionnaireList;let i = index">     
+                <div class="col-lg-12">
+                    <label class="right-padding question">{{field.text}}</label>
+                    <label class="answer">{{questionnaireValue[i+1]}}</label>
+                </div>
+            </ng-container>
+        </div>
+    </form>
+</div>
+</div>

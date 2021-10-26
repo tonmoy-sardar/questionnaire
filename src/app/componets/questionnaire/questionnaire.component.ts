@@ -11,6 +11,8 @@ export class QuestionnaireComponent implements OnInit {
 
   questionnaireForm: FormGroup;
   questionnaireList: any = [];
+  questionnaireValue: any = [];
+  is_submit:boolean
 
   constructor(
     private questionnaireService: QuestionnaireService
@@ -43,6 +45,8 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   onSubmit() {
+    this.is_submit = true;
+    this.questionnaireValue= this.questionnaireForm.value;
     console.log(this.questionnaireForm.value);
   }
 
